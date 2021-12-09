@@ -1,18 +1,28 @@
 package com.example.fhockey;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.app.ActionBar;
+import android.app.StatusBarManager;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowMetrics;
 
 public class MainActivity extends AppCompatActivity {
 
     PongView pongView;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,19 +38,38 @@ public class MainActivity extends AppCompatActivity {
 //        ActionBar actionBar = getActionBar();
 //        actionBar.hide();
 
-        // Get a Display object to access screen details
-        Display display = getWindowManager().getDefaultDisplay();
-
-        // Load the resolution into a Point object
+         //Get a Display object to access screen details
         Point size = new Point();
+        Display display = getWindowManager().getDefaultDisplay();
         display.getSize(size);
 
-        Log.d("x", String.valueOf(size.x));
-        Log.d("y", String.valueOf(size.y));
+        //final WindowMetrics metrics = getWindowManager().getCurrentWindowMetrics();
+        // Load the resolution into a Point object
 
+        //Rect rect = new Rect();
+        //Rect statusBarHeight = new Rect();
+//        Window window = getWindow();
+//        window.getDecorView().getWindowVisibleDisplayFrame(rect);
+        //window.getDecorView().getHeight();
+        //int height = window.getAttributes().height;
+//        window.getDecorView().getClipBounds(statusBarHeight);
+//        DisplayMetrics metrics = new DisplayMetrics();
+//
+//        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//
+//        int width = metrics.widthPixels;
+//        int height = metrics.heightPixels;
+
+        int width = size.x;
+        int height = size.y;
 
         // Initialize pongView and set it as the view
-        pongView = new PongView(this, size.x, size.y);
+        pongView = new PongView(this, width, height);
+
+        Log.d("Display", String.valueOf(width));
+        Log.d("Display", String.valueOf(height));
+        //Log.d("Display", String.valueOf(statusBarHeight.height()));
+
         setContentView(pongView);
     }
 

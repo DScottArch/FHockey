@@ -7,20 +7,43 @@ import java.util.Random;
 
 public class Ball {
 
+    private RectF ice;
     private RectF mRect;
     private float mXVelocity;
     private float mYVelocity;
     private float mBallWidth;
     private float mBallHeight;
 
-    public Ball(int screenX, int screenY) {
-        mBallWidth = screenX / 100;
+    /*
+    TODO: Fix constructor
+    public Ball(int screenX, int screenY){
+
+    // Make the mBall size relative to the screen resolution
+    mBallWidth = screenX / 100;
+    mBallHeight = mBallWidth;
+
+    mYVelocity = screenY / 4;
+    mXVelocity = mYVelocity;
+
+    // Initialize the Rect that represents the mBall
+    mRect = new RectF();
+
+     */
+    public Ball(RectF ice) {
+        mBallWidth = ice.width() / 100;
         mBallHeight = mBallWidth;
 
-        mXVelocity = screenX / 10;
+        mXVelocity = ice.width() / 10;
         mYVelocity = mXVelocity;
 
+        this.ice = ice;
+
         mRect = new RectF();
+
+        mRect.top = ice.height() / 2;
+        ice.left = ice.width() / 20;
+        mRect.bottom = mRect.top + mBallHeight;
+        mRect.right = ice.left + mBallWidth;
     }
 
     public RectF getRect() {
@@ -34,7 +57,7 @@ public class Ball {
         mRect.right = mRect.left + mBallWidth;
         mRect.bottom = mRect.top + mBallHeight;
 
-        Log.d("ballTop", String.valueOf(mRect.top));
+        //Log.d("ballTop", String.valueOf(mRect.top));
     }
 
     // Reverse the vertical heading
@@ -75,8 +98,9 @@ public class Ball {
     }
 
     public void reset(int x, int y){
-        mRect.top = x / 2;
-        mRect.left = y / 20;
+        mRect.top = y / 20;
+        mRect.left = x / 2;
+
         mRect.bottom = mRect.top + mBallHeight;
         mRect.right = mRect.left + mBallWidth;
     }

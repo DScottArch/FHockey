@@ -9,6 +9,7 @@ public class Bat {
 
     // How long and high our mBat will be
     private float mLength;
+    private float mLengthHalf;
     private float mWidth;
 
     // X is the far left of the rectangle which forms our mBat
@@ -33,40 +34,55 @@ public class Bat {
     private int mScreenX;
     private int mScreenY;
 
+    private int iceWidth;
+    private int iceHeight;
+
+    RectF ice;
+
     // This is the constructor method
 // When we create an object from this class we will pass
 // in the screen width and mHeight
-    public Bat(int x, int y){
-
-        mScreenX = x;
-        mScreenY = y;
+    public Bat(RectF ice, int player){
 
         Log.d("yCoor", String.valueOf(mScreenY));
         Log.d("xCoor", String.valueOf(mScreenX));
 
+        this.ice = ice;
 
         // 1/8 screen height wide
-        mLength = mScreenY / 7;
+        mLength = ice.height() / 5;
 
         // 1/25 screen mWidth high
-        mWidth = mScreenX / 75;
+        mWidth = ice.width() / 75;
 
         // Start mBat in roughly the screen centre
-        mYCoord = mScreenY / 2;
+        mYCoord = ((ice.bottom - ice.top) / 2) + ice.top;
 
-        //mYCoord = mWidth;
+        Log.d("mYCoord", String.valueOf(mYCoord));
+        Log.d("iceTop", String.valueOf(ice.top));
+        Log.d("iceBottom", String.valueOf(ice.bottom));
 
+        mXCoord = (ice.right - ice.bottom) + ice.right;
 
-        mRect = new RectF(mXCoord, mYCoord, mXCoord + mWidth, mYCoord + mLength);
+        mLengthHalf = mLength / 2;
+
+        if(player == 1) {
+            mRect = new RectF((int)(ice.left), mYCoord - mLengthHalf, (int)(ice.left) + mWidth, mYCoord + mLengthHalf);
+        }
+        else
+        {
+            mRect = new RectF((int)(ice.right) - mWidth, mYCoord - mLengthHalf, (int)(ice.right), mYCoord + mLengthHalf);
+        }
+
+        //TODO: change mBatSpeed
 
         // How fast is the mBat in pixels per second
-        mBatSpeed = mScreenX;
+        mBatSpeed = ice.width();
         // Cover entire screen in 1 second
     }
 
     public RectF getRect(){
         return mRect;
-
         //return new RectF(0, 100, 100,0);
     }
 
@@ -92,11 +108,11 @@ public class Bat {
         }
 
         // Make sure it's not leaving screen
-        if(mRect.top < 0){
-            mYCoord = 0;
+        if(mRect.top < ice.top){
+            mYCoord = ice.top;
         }
-        if(mRect.bottom > mScreenY){
-            mYCoord = mScreenY - mLength;
+        if(mRect.bottom > ice.bottom){
+            mYCoord = ice.bottom - mLength;
         }
 
         // Update the Bat graphics

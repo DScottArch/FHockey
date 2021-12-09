@@ -72,8 +72,13 @@ public class PongView extends SurfaceView implements Runnable {
 
     // Lives
     int mLives = 3;
-    
-/*
+
+    int iceWidth;
+    int iceHeight;
+
+    RectF ice;
+
+    /*
     When the we call new() on pongView
     This custom constructor runs
 */
@@ -99,11 +104,19 @@ public class PongView extends SurfaceView implements Runnable {
         blue = new Paint();
         red = new Paint();
 
+        ice = new RectF(100, 50, mScreenX - 125, mScreenY - 300);
+
+        iceWidth = (int)ice.width();
+        iceHeight = (int)ice.height();
+
+//        // A new mBat
+//        mBat = new Bat(mScreenX, mScreenY, 1);
+//        mBat2 = new Bat(mScreenX, mScreenY, 2);
         // A new mBat
-        mBat = new Bat(mScreenX, mScreenY);
-        mBat2 = new Bat(mScreenX, mScreenY);
+        mBat = new Bat(ice, 1);
+        mBat2 = new Bat(ice, 2);
         // Create a mBall
-        mBall = new Ball(mScreenX, mScreenY);
+        mBall = new Ball(ice);
 
     /*
         Instantiate our sound pool
@@ -158,7 +171,7 @@ public class PongView extends SurfaceView implements Runnable {
 
     private void setupAndRestart() {
         // Put the mBall back to the start
-        mBall.reset(mScreenX, mScreenY);
+        mBall.reset(iceWidth, iceHeight);
 
         // if game over reset scores and mLives
         if(mLives == 0) {
@@ -171,6 +184,7 @@ public class PongView extends SurfaceView implements Runnable {
     // Movement, collision detection etc.
     public void update(){
         mBat.update(mFPS);
+        mBat2.update(mFPS);
 
         mBall.update(mFPS);
 
@@ -186,21 +200,23 @@ public class PongView extends SurfaceView implements Runnable {
             sp.play(beep1ID, 1, 1, 0, 0, 1);
         }
 
+        //TODO:Ball is causing game to pause
+
         // Bounce the mBall back when it hits the bottom of screen
-        if(mBall.getRect().right > mScreenX){
+        if(mBall.getRect().right > ice.right){
             mBall.reverseXVelocity();
-            mBall.clearObstacleX(mScreenX - 20);
+            mBall.clearObstacleX(ice.right - 20);
         }
 
-        if(mBall.getRect().top < 0){
+        if(mBall.getRect().top < ice.top){
             mBall.reverseYVelocity();
-            mBall.clearObstacleY(10);
+            mBall.clearObstacleY(ice.top + 20);
 
             sp.play(beep2ID, 1, 1, 0, 0, 1);
         }
 
         // If the mBall hits left wall bounce
-        if(mBall.getRect().left < 0){
+        if(mBall.getRect().left < ice.left){
             mBall.reverseXVelocity();
             mBall.clearObstacleX(5);
 
@@ -217,13 +233,12 @@ public class PongView extends SurfaceView implements Runnable {
         }
 
         // If the mBall hits right wall bounce
-        if(mBall.getRect().bottom > mScreenY){
+        if(mBall.getRect().bottom > ice.bottom){
             mBall.reverseYVelocity();
-            mBall.clearObstacleY(mScreenY - 10);
+            mBall.clearObstacleY(ice.bottom - 20);
 
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
-
     }
 
     private void draw() {
@@ -234,7 +249,6 @@ public class PongView extends SurfaceView implements Runnable {
 
             // Lock the mCanvas ready to draw
             mCanvas = mOurHolder.lockCanvas();
-
 
             // Clear the screen with my favorite color
             mCanvas.drawColor(Color.parseColor("#000000"));
@@ -247,11 +261,18 @@ public class PongView extends SurfaceView implements Runnable {
 
             textPaint.setColor(Color.parseColor("#deddde"));
 
-            RectF ice = new RectF(50, 50, mScreenX - 75, mScreenY - 400);
+            ice = new RectF(100, 50, mScreenX - 125, mScreenY - 300);
             mCanvas.drawRect(ice, icePaint);
+
+            RectF topLeftSideline = new RectF(150, 100, 170, ice.bottom - 400);
+            mCanvas.drawRect(topLeftSideline, red);
+
+            RectF outerScreenleft = new RectF(0, 0, 10, ice.bottom - 100);
+            //RectF
 
             // Draw the mBat
             mCanvas.drawRect(mBat.getRect(), red);
+            mCanvas.drawRect(mBat2.getRect(), blue);
 
             // Draw the mBall
             mCanvas.drawRect(mBall.getRect(), blue);
@@ -329,7 +350,6 @@ public class PongView extends SurfaceView implements Runnable {
                 else{
                     mBat.setMovementState(mBat.UP);
                 }
-
                 break;
 
             // Player has removed finger from screen
