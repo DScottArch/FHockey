@@ -56,6 +56,9 @@ public class PongView extends SurfaceView implements Runnable {
     Bat mBat;
     Bat mBat2;
 
+    Goalie mGoalie;
+    Goalie mGoalie2;
+
     // A mBall
     Ball mBall;
 
@@ -104,7 +107,7 @@ public class PongView extends SurfaceView implements Runnable {
         blue = new Paint();
         red = new Paint();
 
-        ice = new RectF(100, 50, mScreenX - 125, mScreenY - 300);
+        ice = new RectF(200, 50, mScreenX - 225, mScreenY - 300);
 
         iceWidth = (int)ice.width();
         iceHeight = (int)ice.height();
@@ -115,6 +118,8 @@ public class PongView extends SurfaceView implements Runnable {
         // A new mBat
         mBat = new Bat(ice, 1);
         mBat2 = new Bat(ice, 2);
+
+        mGoalie = new Goalie(ice, 1);
         // Create a mBall
         mBall = new Ball(ice);
 
@@ -185,6 +190,8 @@ public class PongView extends SurfaceView implements Runnable {
     public void update(){
         mBat.update(mFPS);
         mBat2.update(mFPS);
+
+        mGoalie.update(mFPS);
 
         mBall.update(mFPS);
 
@@ -264,15 +271,18 @@ public class PongView extends SurfaceView implements Runnable {
             ice = new RectF(100, 50, mScreenX - 125, mScreenY - 300);
             mCanvas.drawRect(ice, icePaint);
 
-            RectF topLeftSideline = new RectF(150, 100, 170, ice.bottom - 400);
-            mCanvas.drawRect(topLeftSideline, red);
+            //RectF topLeftSideline = new RectF(150, 100, 170, ice.bottom - 400);
+            //mCanvas.drawRect(topLeftSideline, red);
 
-            RectF outerScreenleft = new RectF(0, 0, 10, ice.bottom - 100);
+            //RectF outerScreenleft = new RectF(0, 0, 10, ice.bottom - 100);
             //RectF
 
             // Draw the mBat
             mCanvas.drawRect(mBat.getRect(), red);
             mCanvas.drawRect(mBat2.getRect(), blue);
+
+            mCanvas.drawRect(mGoalie.getRect(), red);
+            mCanvas.drawRect(mGoalie.getmRect2(), red);
 
             // Draw the mBall
             mCanvas.drawRect(mBall.getRect(), blue);
@@ -346,16 +356,18 @@ public class PongView extends SurfaceView implements Runnable {
                 // Is the touch on the down or up?
                 if(motionEvent.getY() > mScreenY / 2){
                     mBat.setMovementState(mBat.DOWN);
+                    mGoalie.setMovementState(mGoalie.DOWN);
                 }
                 else{
                     mBat.setMovementState(mBat.UP);
+                    mGoalie.setMovementState(mGoalie.UP);
                 }
                 break;
 
             // Player has removed finger from screen
             case MotionEvent.ACTION_UP:
-
                 mBat.setMovementState(mBat.STOPPED);
+                mGoalie.setMovementState(mGoalie.STOPPED);
                 break;
         }
         return true;

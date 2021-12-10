@@ -67,9 +67,9 @@ public class Bat {
         mLengthHalf = mLength / 2;
 
         if(player == 1) {
-            mRect = new RectF((int)(ice.left), mYCoord - mLengthHalf, (int)(ice.left) + mWidth, mYCoord + mLengthHalf);
+            mRect = new RectF((int)(ice.left) + 100, mYCoord - mLengthHalf, (int)(ice.left) + 100 + mWidth, mYCoord + mLengthHalf);
         }
-        else
+        else if(player == 2)
         {
             mRect = new RectF((int)(ice.right) - mWidth, mYCoord - mLengthHalf, (int)(ice.right), mYCoord + mLengthHalf);
         }
