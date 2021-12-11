@@ -1,5 +1,6 @@
 package com.example.fhockey;
 
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
@@ -84,6 +85,16 @@ public class Bat {
     public RectF getRect(){
         return mRect;
         //return new RectF(0, 100, 100,0);
+    }
+
+    public void set(RectF touchPoint)
+    {
+        mRect.top = touchPoint.top - mLengthHalf;
+        mRect.bottom = touchPoint.top + mLengthHalf;
+        mRect.left = touchPoint.left - mWidth / 2;
+        mRect.right = touchPoint.left + mWidth / 2;
+        //mRect = new RectF((int)(ice.left) + 100, mYCoord - mLengthHalf, (int)(ice.left) + 100 + mWidth, mYCoord + mLengthHalf);
+
     }
 
     // This method will be used to change/set if the mBat is going

@@ -344,32 +344,64 @@ public class PongView extends SurfaceView implements Runnable {
         }
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) {
 
-        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getAction() ;
+        float x = event.getX() ;
+        float y = event.getY() ;
 
-            // Player has touched the screen
-            case MotionEvent.ACTION_DOWN:
+        float width = mBat.getRect().width();
+        float height = mBat.getRect().height();
 
-                mPaused = false;
+        RectF touchPoint = new RectF(x, y, x + 100, y + 100);
+        RectF touchPoint2 = new RectF(x - 100, y - 100, x, y);
 
-                // Is the touch on the down or up?
-                if(motionEvent.getY() > mScreenY / 2){
-                    mBat.setMovementState(mBat.DOWN);
-                    mGoalie.setMovementState(mGoalie.DOWN);
+        Log.d("xy", String.valueOf(x) + String.valueOf(y));
+
+        switch(action) {
+            case MotionEvent.ACTION_MOVE:
+
+                if(mBat.getRect().intersect(touchPoint) || mBat.getRect().intersect(touchPoint2)) {
+                    // Something should happen
+                    mBat.set(touchPoint);
+                    Log.d("touch", "touch");
                 }
-                else{
-                    mBat.setMovementState(mBat.UP);
-                    mGoalie.setMovementState(mGoalie.UP);
-                }
-                break;
 
-            // Player has removed finger from screen
-            case MotionEvent.ACTION_UP:
-                mBat.setMovementState(mBat.STOPPED);
-                mGoalie.setMovementState(mGoalie.STOPPED);
-                break;
         }
-        return true;
+
+        return true ;
+
     }
+
+//    public boolean onTouchEvent(MotionEvent motionEvent) {
+//
+//        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+//
+//            // Player has touched the screen
+//            case MotionEvent.ACTION_DOWN:
+//
+//
+//                mPaused = false;
+//
+//                // Is the touch on the down or up?
+//                if(motionEvent.getY() > mScreenY / 2){
+////                    mBat.setMovementState(mBat.DOWN);
+////                    mGoalie.setMovementState(mGoalie.DOWN);
+//                }
+//                else{
+////                    mBat.setMovementState(mBat.UP);
+////                    mGoalie.setMovementState(mGoalie.UP);
+//                }
+//                break;
+//
+//            // Player has removed finger from screen
+//            case MotionEvent.ACTION_UP:
+//                mBat.setMovementState(mBat.STOPPED);
+//                mGoalie.setMovementState(mGoalie.STOPPED);
+//                break;
+
+
+//        }
+////        return true;
+////    }
 }
