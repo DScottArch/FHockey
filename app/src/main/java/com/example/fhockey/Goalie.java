@@ -1,12 +1,12 @@
 package com.example.fhockey;
 
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
-public class Bat {
+public class Goalie {
     // RectF is an object that holds four coordinates - just what we need
     private RectF mRect;
+    private RectF mRect2;
 
     // How long and high our mBat will be
     private float mLength;
@@ -43,7 +43,7 @@ public class Bat {
     // This is the constructor method
 // When we create an object from this class we will pass
 // in the screen width and mHeight
-    public Bat(RectF ice, int player){
+    public Goalie(RectF ice, int player){
 
         Log.d("yCoor", String.valueOf(mScreenY));
         Log.d("xCoor", String.valueOf(mScreenX));
@@ -68,9 +68,11 @@ public class Bat {
         mLengthHalf = mLength / 2;
 
         if(player == 1) {
-            mRect = new RectF((int)(ice.left) + 100, mYCoord - mLengthHalf, (int)(ice.left) + 100 + mWidth, mYCoord + mLengthHalf);
+            mRect = new RectF((int)(ice.left), mYCoord - mLengthHalf, (int)(ice.left) + mWidth, mYCoord + mLengthHalf);
+            mRect2 = new RectF((int)(ice.left - 20), mYCoord - mLengthHalf, (int)(ice.left - 20) + mWidth, mYCoord + mLengthHalf);
+
         }
-        else if(player == 2)
+        else
         {
             mRect = new RectF((int)(ice.right) - mWidth, mYCoord - mLengthHalf, (int)(ice.right), mYCoord + mLengthHalf);
         }
@@ -87,14 +89,9 @@ public class Bat {
         //return new RectF(0, 100, 100,0);
     }
 
-    public void set(RectF touchPoint)
+    public RectF getMRect2()
     {
-        mRect.top = touchPoint.top - mLengthHalf;
-        mRect.bottom = touchPoint.top + mLengthHalf;
-        mRect.left = touchPoint.left - mWidth / 2;
-        mRect.right = touchPoint.left + mWidth / 2;
-        //mRect = new RectF((int)(ice.left) + 100, mYCoord - mLengthHalf, (int)(ice.left) + 100 + mWidth, mYCoord + mLengthHalf);
-
+        return mRect2;
     }
 
     // This method will be used to change/set if the mBat is going
@@ -105,29 +102,46 @@ public class Bat {
 //        //Log.d("batstate", String.valueOf(mBatMoving));
 //    }
 
+    public void set(RectF touchPoint)
+    {
+        mRect.top = touchPoint.top - mLengthHalf;
+        mRect.bottom = touchPoint.top + mLengthHalf;
+        mRect.left = mRect.left;
+        mRect.right = mRect.right;
+
+        mRect2.top = touchPoint.top - mLengthHalf;
+        mRect2.bottom = touchPoint.top + mLengthHalf;
+        mRect2.left = mRect2.left;
+        mRect2.right = mRect2.right;
+        //mRect = new RectF((int)(ice.left) + 100, mYCoord - mLengthHalf, (int)(ice.left) + 100 + mWidth, mYCoord + mLengthHalf);
+    }
+
     // This update method will be called from update in PongView
 // It determines if the Bat needs to move and changes the coordinates
 // contained in mRect if necessary
-    public void update(long fps){
-
-//        if(mBatMoving == UP){
-//            mYCoord = mYCoord - mBatSpeed / fps;
-//        }
+//    public void update(long fps){
 //
-//        if(mBatMoving == DOWN){
-//            mYCoord = mYCoord + mBatSpeed / fps;
-//        }
-
-        // Make sure it's not leaving screen
-//        if(mRect.top < ice.top){
-//            mYCoord = ice.top;
-//        }
-//        if(mRect.bottom > ice.bottom){
-//            mYCoord = ice.bottom - mLength;
-//        }
-//
-//        // Update the Bat graphics
-//        mRect.top = mYCoord;
-//        mRect.bottom = mYCoord + mLength;
-    }
+////        if(mBatMoving == UP){
+////            mYCoord = mYCoord - mBatSpeed / fps;
+////        }
+////
+////        if(mBatMoving == DOWN){
+////            mYCoord = mYCoord + mBatSpeed / fps;
+////        }
+////
+////        // Make sure it's not leaving screen
+////        if(mRect.top < ice.top){
+////            mYCoord = ice.top;
+////        }
+////        if(mRect.bottom > ice.bottom){
+////            mYCoord = ice.bottom - mLength;
+////        }
+////
+////        // Update the Bat graphics
+////        mRect.top = mYCoord;
+////        mRect.bottom = mYCoord + mLength;
+////
+////        mRect2.top = mYCoord;
+////        mRect2.bottom = mYCoord + mLength;
+//    }
 }

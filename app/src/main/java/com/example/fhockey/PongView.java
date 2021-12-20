@@ -188,10 +188,10 @@ public class PongView extends SurfaceView implements Runnable {
     // Everything that needs to be updated goes in here
     // Movement, collision detection etc.
     public void update(){
-        mBat.update(mFPS);
-        mBat2.update(mFPS);
-
-        mGoalie.update(mFPS);
+//        mBat.update(mFPS);
+//        mBat2.update(mFPS);
+//
+//        mGoalie.update(mFPS);
 
         mBall.update(mFPS);
 
@@ -282,7 +282,7 @@ public class PongView extends SurfaceView implements Runnable {
             mCanvas.drawRect(mBat2.getRect(), blue);
 
             mCanvas.drawRect(mGoalie.getRect(), red);
-            mCanvas.drawRect(mGoalie.getmRect2(), red);
+            mCanvas.drawRect(mGoalie.getMRect2(), red);
 
             // Draw the mBall
             mCanvas.drawRect(mBall.getRect(), blue);
@@ -350,21 +350,32 @@ public class PongView extends SurfaceView implements Runnable {
         float x = event.getX() ;
         float y = event.getY() ;
 
-        float width = mBat.getRect().width();
-        float height = mBat.getRect().height();
+//        float width = mBat.getRect().width();
+//        float height = mBat.getRect().height();
 
         RectF touchPoint = new RectF(x, y, x + 100, y + 100);
         RectF touchPoint2 = new RectF(x - 100, y - 100, x, y);
 
+//        RectF goalieTouchPoint = new RectF(x, y, x + 100, y + 100);
+//        RectF goalieTouchPoint2 = new RectF(x - 100, y - 100, x, y);
+
         Log.d("xy", String.valueOf(x) + String.valueOf(y));
 
         switch(action) {
+            case MotionEvent.ACTION_DOWN:
+                mPaused = false;
+                break;
             case MotionEvent.ACTION_MOVE:
 
                 if(mBat.getRect().intersect(touchPoint) || mBat.getRect().intersect(touchPoint2)) {
                     // Something should happen
                     mBat.set(touchPoint);
                     Log.d("touch", "touch");
+                }
+                else if(mGoalie.getRect().intersect(touchPoint) || mGoalie.getRect().intersect(touchPoint2) ||
+                mGoalie.getMRect2().intersect(touchPoint) || mGoalie.getMRect2().intersect(touchPoint2))
+                {
+                    mGoalie.set(touchPoint);
                 }
 
         }
